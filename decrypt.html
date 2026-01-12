@@ -29,7 +29,17 @@
     <input id="file" type="file" />
 
     <label for="password">Password</label>
-    <input id="password" type="password" placeholder="Enter password" />
+
+<div class="password-wrapper">
+  <input
+    id="password"
+    type="password"
+    placeholder="Min 8 chars, Aa1@"
+  />
+  <button type="button" id="togglePassword" class="toggle-btn">
+    👁️
+  </button>
+</div>
 
     <div class="actions">
       <button id="decryptBtn">Decrypt</button>

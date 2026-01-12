@@ -1,10 +1,11 @@
-// Change this later to your deployed backend URL (Render/Cloud Run/etc.)
+// Change this later deployed backend URL (Render/Cloud Run)
 const API_BASE = "http://127.0.0.1:8000";
 
-async function postFile(endpoint, file, password) {
+async function postFile(endpoint, file, vaultPassword, filePassword = null) {
   const fd = new FormData();
   fd.append("file", file);
-  fd.append("password", password);
+  fd.append("vault_password", vaultPassword);
+  if (filePassword) fd.append("file_password", filePassword);
 
   const res = await fetch(`${API_BASE}${endpoint}`, {
     method: "POST",
@@ -49,6 +50,12 @@ function showStatus(el, type, msg) {
   el.style.display = "block";
 }
 
+function isStrongPassword(password) {
+  const regex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).{8,}$/;
+  return regex.test(password);
+}
+
 function initEncryptPage() {
   const file = document.getElementById("file");
   const pass = document.getElementById("password");
@@ -60,20 +67,31 @@ function initEncryptPage() {
     status.style.display = "none";
 
     if (!file.files?.length) return showStatus(status, "err", "Please choose a file first.");
-    if (!pass.value || pass.value.length < 8) return showStatus(status, "err", "Password must be at least 8 characters.");
+    if (!isStrongPassword(pass.value)) {
+  return showStatus(
+    status,
+    "err",
+    "Password must be at least 8 characters and include uppercase, lowercase, number, and symbol."
+  );
+}
+
 
     btn.disabled = true;
 
-    // Optional: show progress UI (fake)
     if (bar) bar.style.display = "block";
 
     try {
       const originalName = file.files[0].name;
 
-      // ✅ REAL CALL to backend
-      const blob = await postFile("/encrypt", file.files[0], pass.value);
+ 
+      // Ask user for optional file-level password
+let filePass = prompt("Enter file password (optional, for PDF only):");
+filePass = filePass && filePass.trim() !== "" ? filePass : null;
 
-      // ✅ Download encrypted file
+const blob = await postFile("/encrypt", file.files[0], pass.value, filePass);
+
+
+
       downloadBlob(blob, `${originalName}.enc`);
 
       showStatus(status, "ok", `Encrypted successfully: ${originalName}.enc`);
@@ -84,6 +102,10 @@ function initEncryptPage() {
       if (bar) bar.style.display = "none";
     }
   });
+  pass.addEventListener("input", () => {
+  pass.style.borderColor = isStrongPassword(pass.value) ? "green" : "red";
+});
+
 }
 
 
@@ -106,15 +128,13 @@ function initDecryptPage() {
     try {
       const encName = file.files[0].name;
 
-      // ✅ REAL CALL to backend
+
       const blob = await postFile("/decrypt", file.files[0], pass.value);
 
-      // output filename
       const outName = encName.toLowerCase().endsWith(".enc")
         ? encName.slice(0, -4)
         : "decrypted_file";
 
-      // ✅ Download decrypted file
       downloadBlob(blob, outName);
 
       showStatus(status, "ok", `Decrypted successfully: ${outName}`);
@@ -127,9 +147,23 @@ function initDecryptPage() {
   });
 }
 
+function initPasswordToggle() {
+  const pass = document.getElementById("password");
+  const toggle = document.getElementById("togglePassword");
+
+  if (!pass || !toggle) return;
+
+  toggle.addEventListener("click", () => {
+    const isHidden = pass.type === "password";
+    pass.type = isHidden ? "text" : "password";
+    toggle.textContent = isHidden ? "🙈" : "👁️";
+  });
+}
+
 
 document.addEventListener("DOMContentLoaded", () => {
   setActiveNav();
+  initPasswordToggle();
   if (document.body.dataset.page === "encrypt") initEncryptPage();
   if (document.body.dataset.page === "decrypt") initDecryptPage();
 });

@@ -235,3 +235,28 @@ button:disabled { opacity: 0.6; cursor:not-allowed; }
   border-radius: 16px;
   border: 1px solid var(--border);
 }
+
+.password-wrapper {
+  position: relative;
+}
+
+.password-wrapper input {
+  width: 100%;
+  padding-right: 40px;
+}
+
+.toggle-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+  opacity: 0.7;
+}
+
+.toggle-btn:hover {
+  opacity: 1;
+}

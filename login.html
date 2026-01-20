@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Login | Secure File Vault</title>
+  <link rel="stylesheet" href="design.css">
+</head>
+
+<body>
+<header>
+  <div class="brand">Login | Secure File Vault</div>
+</header>
+
+<main class="container">
+  <div class="card" style="max-width:420px;margin:auto;">
+    <h2>Login</h2>
+    <p class="muted">Access your secure vault</p>
+
+    <label>Login As</label>
+    <select id="role">
+      <option value="user">User</option>
+      <option value="admin">Admin</option>
+    </select>
+
+    <label>Email</label>
+    <input type="text" id="email" placeholder="user@email.com">
+
+    <label>Password</label>
+    <div class="password-wrapper">
+      <input type="password" id="password" placeholder="********">
+      <button class="toggle-btn" onclick="togglePassword()">👁</button>
+    </div>
+
+    <div class="actions">
+      <button onclick="login()">Login</button>
+    </div>
+
+    <p class="signup-text">
+      Don't have an account?
+      <a href="signup.html">Sign up</a>
+    </p>
+
+    <div id="loginStatus" class="status err"></div>
+  </div>
+</main>
+
+<script src="auth.js"></script>
+</body>
+</html>

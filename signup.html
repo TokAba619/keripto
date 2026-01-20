@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Sign up | Secure File Vault</title>
+  <link rel="stylesheet" href="design.css">
+</head>
+
+<body>
+<header>
+  <div class="brand">Sign up | Secure File Vault</div>
+</header>
+
+<main class="container">
+  <div class="card" style="max-width:420px;margin:auto;">
+    <h2>Create Account</h2>
+    <p class="muted">Register to access your secure vault</p>
+
+    <label>Full Name</label>
+    <input type="text" id="name" placeholder="Your full name">
+
+    <label>Email</label>
+    <input type="text" id="email" placeholder="user@email.com">
+
+    <label>Password</label>
+    <div class="password-wrapper">
+      <input type="password" id="password" placeholder="********">
+      <button class="toggle-btn" type="button" onclick="togglePassword('password')">👁</button>
+    </div>
+
+    <label>Confirm Password</label>
+    <div class="password-wrapper">
+      <input type="password" id="confirmPassword" placeholder="********">
+      <button class="toggle-btn" type="button" onclick="togglePassword('confirmPassword')">👁</button>
+    </div>
+
+    <div class="actions">
+      <button onclick="signup()">Sign up</button>
+    </div>
+
+    <!-- Login redirect -->
+    <p class="signup-text">
+      Already have an account?
+      <a href="login.html">Login</a>
+    </p>
+
+    <div id="signupStatus" class="status err"></div>
+  </div>
+</main>
+
+<script src="signup.js"></script>
+</body>
+</html>

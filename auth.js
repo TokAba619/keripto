@@ -15,7 +15,6 @@ function togglePassword() {
 async function login() {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
-  const selectedRole = document.getElementById("role").value; // user/admin (UI only)
 
   if (!email || !password) return setStatus("Please enter email and password");
   if (!email.includes("@")) return setStatus("Please enter a valid email");
@@ -34,11 +33,6 @@ async function login() {
 
     if (!res.ok) {
       return setStatus(data.detail || "Login failed");
-    }
-
-    // data.role MUST come from backend
-    if (selectedRole !== data.role) {
-      return setStatus(`You selected "${selectedRole}" but your account is "${data.role}".`);
     }
 
     // store session basic

@@ -50,8 +50,8 @@ async function login() {
 
     // ✅ redirect based on role
     setTimeout(() => {
-      if (data.role === "admin") window.location.href = "dashboard-admin.html";
-      else window.location.href = "index.html";
+      if (data.role === "admin") window.location.href = "dashboardadmin.html";
+      else window.location.href = "dashboarduser.html";
     }, 700);
 
   } catch (err) {
